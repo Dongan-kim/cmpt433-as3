@@ -1,0 +1,8 @@
+/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles/edit_cache.dir
+/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles/rebuild_cache.dir
+/home/don/cmpt433/work/myApps/beatbox/build/hal/CMakeFiles/hal.dir
+/home/don/cmpt433/work/myApps/beatbox/build/hal/CMakeFiles/edit_cache.dir
+/home/don/cmpt433/work/myApps/beatbox/build/hal/CMakeFiles/rebuild_cache.dir
+/home/don/cmpt433/work/myApps/beatbox/build/app/CMakeFiles/beatbox.dir
+/home/don/cmpt433/work/myApps/beatbox/build/app/CMakeFiles/edit_cache.dir
+/home/don/cmpt433/work/myApps/beatbox/build/app/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+/usr/bin/cc -fsanitize=address -Wl,--dependency-file=CMakeFiles/beatbox.dir/link.d CMakeFiles/beatbox.dir/src/audioMixer.c.o CMakeFiles/beatbox.dir/src/beatbox.c.o CMakeFiles/beatbox.dir/src/main.c.o -o beatbox  ../hal/libhal.a -lasound
