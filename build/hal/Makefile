@@ -130,29 +130,29 @@ hal/fast:
 	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/build
 .PHONY : hal/fast
 
-src/button.o: src/button.c.o
-.PHONY : src/button.o
+src/joystick.o: src/joystick.c.o
+.PHONY : src/joystick.o
 
 # target to build an object file
-src/button.c.o:
-	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/button.c.o
-.PHONY : src/button.c.o
+src/joystick.c.o:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick.c.o
+.PHONY : src/joystick.c.o
 
-src/button.i: src/button.c.i
-.PHONY : src/button.i
+src/joystick.i: src/joystick.c.i
+.PHONY : src/joystick.i
 
 # target to preprocess a source file
-src/button.c.i:
-	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/button.c.i
-.PHONY : src/button.c.i
+src/joystick.c.i:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick.c.i
+.PHONY : src/joystick.c.i
 
-src/button.s: src/button.c.s
-.PHONY : src/button.s
+src/joystick.s: src/joystick.c.s
+.PHONY : src/joystick.s
 
 # target to generate assembly for a file
-src/button.c.s:
-	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/button.c.s
-.PHONY : src/button.c.s
+src/joystick.c.s:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick.c.s
+.PHONY : src/joystick.c.s
 
 # Help Target
 help:
@@ -163,9 +163,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... hal"
-	@echo "... src/button.o"
-	@echo "... src/button.i"
-	@echo "... src/button.s"
+	@echo "... src/joystick.o"
+	@echo "... src/joystick.i"
+	@echo "... src/joystick.s"
 .PHONY : help
 
 

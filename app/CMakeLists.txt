@@ -5,7 +5,7 @@ file(GLOB MY_SOURCES "src/*.c")
 add_executable(beatbox ${MY_SOURCES})
 
 # Make use of the HAL library
-target_link_libraries(beatbox LINK_PRIVATE hal)
+target_link_libraries(beatbox LINK_PRIVATE hal lgpio gpiod)
 
 # ---------------- NEW! ----------------
 # ALSA support
@@ -15,6 +15,7 @@ target_link_libraries(beatbox LINK_PRIVATE asound)
 # PTHREAD support
 find_package(Threads REQUIRED)
 target_link_libraries(beatbox LINK_PRIVATE Threads::Threads)
+
 
 # Copy executable to final location (change `wave_player_cmake` to project name as needed)
 add_custom_command(TARGET beatbox POST_BUILD 

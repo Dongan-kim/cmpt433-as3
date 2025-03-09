@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/don/cmpt433/work/myApps/beatbox/hal/src/button.c" "hal/CMakeFiles/hal.dir/src/button.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/button.c.o.d"
+  "/home/don/cmpt433/work/myApps/beatbox/hal/src/joystick.c" "hal/CMakeFiles/hal.dir/src/joystick.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/joystick.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

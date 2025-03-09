@@ -63,21 +63,25 @@ CMAKE_BINARY_DIR = /home/don/cmpt433/work/myApps/beatbox/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: lgpio/all
 all: hal/all
 all: app/all
 .PHONY : all
 
 # The main recursive "codegen" target.
+codegen: lgpio/codegen
 codegen: hal/codegen
 codegen: app/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
+preinstall: lgpio/preinstall
 preinstall: hal/preinstall
 preinstall: app/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: lgpio/clean
 clean: hal/clean
 clean: app/clean
 .PHONY : clean
@@ -121,10 +125,61 @@ hal/clean: hal/CMakeFiles/hal.dir/clean
 .PHONY : hal/clean
 
 #=============================================================================
+# Directory level rules for directory lgpio
+
+# Recursive "all" directory target.
+lgpio/all: lgpio/CMakeFiles/lgpio.dir/all
+.PHONY : lgpio/all
+
+# Recursive "codegen" directory target.
+lgpio/codegen: lgpio/CMakeFiles/lgpio.dir/codegen
+.PHONY : lgpio/codegen
+
+# Recursive "preinstall" directory target.
+lgpio/preinstall:
+.PHONY : lgpio/preinstall
+
+# Recursive "clean" directory target.
+lgpio/clean: lgpio/CMakeFiles/lgpio.dir/clean
+.PHONY : lgpio/clean
+
+#=============================================================================
+# Target rules for target lgpio/CMakeFiles/lgpio.dir
+
+# All Build rule for target.
+lgpio/CMakeFiles/lgpio.dir/all:
+	$(MAKE) $(MAKESILENT) -f lgpio/CMakeFiles/lgpio.dir/build.make lgpio/CMakeFiles/lgpio.dir/depend
+	$(MAKE) $(MAKESILENT) -f lgpio/CMakeFiles/lgpio.dir/build.make lgpio/CMakeFiles/lgpio.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=7,8,9,10,11,12,13,14,15,16,17,18,19,20 "Built target lgpio"
+.PHONY : lgpio/CMakeFiles/lgpio.dir/all
+
+# Build rule for subdir invocation for target.
+lgpio/CMakeFiles/lgpio.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 14
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lgpio/CMakeFiles/lgpio.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 0
+.PHONY : lgpio/CMakeFiles/lgpio.dir/rule
+
+# Convenience name for target.
+lgpio: lgpio/CMakeFiles/lgpio.dir/rule
+.PHONY : lgpio
+
+# codegen rule for target.
+lgpio/CMakeFiles/lgpio.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f lgpio/CMakeFiles/lgpio.dir/build.make lgpio/CMakeFiles/lgpio.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=7,8,9,10,11,12,13,14,15,16,17,18,19,20 "Finished codegen for target lgpio"
+.PHONY : lgpio/CMakeFiles/lgpio.dir/codegen
+
+# clean rule for target.
+lgpio/CMakeFiles/lgpio.dir/clean:
+	$(MAKE) $(MAKESILENT) -f lgpio/CMakeFiles/lgpio.dir/build.make lgpio/CMakeFiles/lgpio.dir/clean
+.PHONY : lgpio/CMakeFiles/lgpio.dir/clean
+
+#=============================================================================
 # Target rules for target hal/CMakeFiles/hal.dir
 
 # All Build rule for target.
-hal/CMakeFiles/hal.dir/all:
+hal/CMakeFiles/hal.dir/all: lgpio/CMakeFiles/lgpio.dir/all
 	$(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/depend
 	$(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=5,6 "Built target hal"
@@ -132,7 +187,7 @@ hal/CMakeFiles/hal.dir/all:
 
 # Build rule for subdir invocation for target.
 hal/CMakeFiles/hal.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 16
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 hal/CMakeFiles/hal.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 0
 .PHONY : hal/CMakeFiles/hal.dir/rule
@@ -157,6 +212,7 @@ hal/CMakeFiles/hal.dir/clean:
 
 # All Build rule for target.
 app/CMakeFiles/beatbox.dir/all: hal/CMakeFiles/hal.dir/all
+app/CMakeFiles/beatbox.dir/all: lgpio/CMakeFiles/lgpio.dir/all
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/beatbox.dir/build.make app/CMakeFiles/beatbox.dir/depend
 	$(MAKE) $(MAKESILENT) -f app/CMakeFiles/beatbox.dir/build.make app/CMakeFiles/beatbox.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=1,2,3,4 "Built target beatbox"
@@ -164,7 +220,7 @@ app/CMakeFiles/beatbox.dir/all: hal/CMakeFiles/hal.dir/all
 
 # Build rule for subdir invocation for target.
 app/CMakeFiles/beatbox.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 20
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 app/CMakeFiles/beatbox.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles 0
 .PHONY : app/CMakeFiles/beatbox.dir/rule

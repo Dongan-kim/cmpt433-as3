@@ -129,6 +129,7 @@ app/beatbox: app/CMakeFiles/beatbox.dir/src/main.c.o
 app/beatbox: app/CMakeFiles/beatbox.dir/build.make
 app/beatbox: app/CMakeFiles/beatbox.dir/compiler_depend.ts
 app/beatbox: hal/libhal.a
+app/beatbox: lgpio/liblgpio.a
 app/beatbox: app/CMakeFiles/beatbox.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable beatbox"
 	cd /home/don/cmpt433/work/myApps/beatbox/build/app && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/beatbox.dir/link.txt --verbose=$(VERBOSE)

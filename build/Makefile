@@ -117,6 +117,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named lgpio
+
+# Build rule for target.
+lgpio: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lgpio
+.PHONY : lgpio
+
+# fast build rule for target.
+lgpio/fast:
+	$(MAKE) $(MAKESILENT) -f lgpio/CMakeFiles/lgpio.dir/build.make lgpio/CMakeFiles/lgpio.dir/build
+.PHONY : lgpio/fast
+
+#=============================================================================
 # Target rules for targets named hal
 
 # Build rule for target.
@@ -152,6 +165,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... beatbox"
 	@echo "... hal"
+	@echo "... lgpio"
 .PHONY : help
 
 

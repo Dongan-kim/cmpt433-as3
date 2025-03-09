@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/don/cmpt433/work/myApps/beatbox/hal/hal/include -I/home/don/cmpt433/work/myApps/beatbox/hal/include
+C_INCLUDES = -I/home/don/cmpt433/work/myApps/beatbox/hal/hal/include -I/home/don/cmpt433/work/myApps/beatbox/hal/include -I/home/don/cmpt433/work/myApps/beatbox/lgpio/.
 
 C_FLAGS = -std=gnu11 -Wall -Werror -Wpedantic -Wextra -fdiagnostics-color -fsanitize=address
 

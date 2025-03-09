@@ -16,6 +16,8 @@ add_link_options(-fsanitize=address)
 find_package(ALSA REQUIRED)
 
 # What folders to build
+add_subdirectory(lgpio)
 add_subdirectory(hal)  
 add_subdirectory(app)
+
 
