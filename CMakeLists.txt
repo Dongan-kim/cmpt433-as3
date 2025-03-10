@@ -15,8 +15,12 @@ add_link_options(-fsanitize=address)
 # Add ALSA dependency
 find_package(ALSA REQUIRED)
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GPIOD REQUIRED libgpiod)
+
 # What folders to build
 add_subdirectory(lgpio)
+add_subdirectory(lcd)
 add_subdirectory(hal)  
 add_subdirectory(app)
 

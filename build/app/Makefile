@@ -202,6 +202,30 @@ src/main.c.s:
 	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/beatbox.dir/build.make app/CMakeFiles/beatbox.dir/src/main.c.s
 .PHONY : src/main.c.s
 
+src/periodTimer.o: src/periodTimer.c.o
+.PHONY : src/periodTimer.o
+
+# target to build an object file
+src/periodTimer.c.o:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/beatbox.dir/build.make app/CMakeFiles/beatbox.dir/src/periodTimer.c.o
+.PHONY : src/periodTimer.c.o
+
+src/periodTimer.i: src/periodTimer.c.i
+.PHONY : src/periodTimer.i
+
+# target to preprocess a source file
+src/periodTimer.c.i:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/beatbox.dir/build.make app/CMakeFiles/beatbox.dir/src/periodTimer.c.i
+.PHONY : src/periodTimer.c.i
+
+src/periodTimer.s: src/periodTimer.c.s
+.PHONY : src/periodTimer.s
+
+# target to generate assembly for a file
+src/periodTimer.c.s:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f app/CMakeFiles/beatbox.dir/build.make app/CMakeFiles/beatbox.dir/src/periodTimer.c.s
+.PHONY : src/periodTimer.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -220,6 +244,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/periodTimer.o"
+	@echo "... src/periodTimer.i"
+	@echo "... src/periodTimer.s"
 .PHONY : help
 
 

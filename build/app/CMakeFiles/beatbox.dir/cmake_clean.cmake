@@ -6,6 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/beatbox.dir/src/beatbox.c.o.d"
   "CMakeFiles/beatbox.dir/src/main.c.o"
   "CMakeFiles/beatbox.dir/src/main.c.o.d"
+  "CMakeFiles/beatbox.dir/src/periodTimer.c.o"
+  "CMakeFiles/beatbox.dir/src/periodTimer.c.o.d"
   "beatbox"
   "beatbox.pdb"
 )

@@ -1,11 +1,13 @@
 # Build the app which supports ALSA, using the HAL
 
-include_directories(include)
+include_directories(${CMAKE_SOURCE_DIR}/app/include)
 file(GLOB MY_SOURCES "src/*.c")
 add_executable(beatbox ${MY_SOURCES})
 
 # Make use of the HAL library
-target_link_libraries(beatbox LINK_PRIVATE hal lgpio gpiod)
+target_link_libraries(beatbox LINK_PRIVATE lgpio lcd hal gpiod)
+
+target_include_directories(beatbox PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../hal/include)
 
 # ---------------- NEW! ----------------
 # ALSA support

@@ -103,6 +103,7 @@ int joystick_pressed() {
     if (!button_line) {
         return 0; // Button not initialized
     }
+    
     return gpiod_line_get_value(button_line) == 0;  // Active LOW
 }
 

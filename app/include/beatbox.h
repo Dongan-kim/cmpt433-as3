@@ -18,6 +18,10 @@ int getBPM();
 // 0 - None (off), 1 - Rock, 2 - Custom
 void setMode(int mode);
 
+int getMode();
+
+void BeatBox_process();
+
 extern pthread_mutex_t beatMutex;
 extern int currentMode; 
 

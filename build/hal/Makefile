@@ -154,6 +154,30 @@ src/joystick.c.s:
 	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick.c.s
 .PHONY : src/joystick.c.s
 
+src/lcd_display.o: src/lcd_display.c.o
+.PHONY : src/lcd_display.o
+
+# target to build an object file
+src/lcd_display.c.o:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/lcd_display.c.o
+.PHONY : src/lcd_display.c.o
+
+src/lcd_display.i: src/lcd_display.c.i
+.PHONY : src/lcd_display.i
+
+# target to preprocess a source file
+src/lcd_display.c.i:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/lcd_display.c.i
+.PHONY : src/lcd_display.c.i
+
+src/lcd_display.s: src/lcd_display.c.s
+.PHONY : src/lcd_display.s
+
+# target to generate assembly for a file
+src/lcd_display.c.s:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/lcd_display.c.s
+.PHONY : src/lcd_display.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -166,6 +190,9 @@ help:
 	@echo "... src/joystick.o"
 	@echo "... src/joystick.i"
 	@echo "... src/joystick.s"
+	@echo "... src/lcd_display.o"
+	@echo "... src/lcd_display.i"
+	@echo "... src/lcd_display.s"
 .PHONY : help
 
 

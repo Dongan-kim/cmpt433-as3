@@ -12,6 +12,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.31.5/CMakeCCompiler.cmake"
   "CMakeFiles/3.31.5/CMakeSystem.cmake"
   "/home/don/cmpt433/work/myApps/beatbox/hal/CMakeLists.txt"
+  "/home/don/cmpt433/work/myApps/beatbox/lcd/CMakeLists.txt"
   "/home/don/cmpt433/work/myApps/beatbox/lgpio/CMakeLists.txt"
   "/usr/share/cmake-3.31/Modules/CMakeCCompiler.cmake.in"
   "/usr/share/cmake-3.31/Modules/CMakeCCompilerABI.c"
@@ -121,6 +122,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/3.31.5/CMakeCCompiler.cmake"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "lgpio/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "lcd/CMakeFiles/CMakeDirectoryInformation.cmake"
   "hal/CMakeFiles/CMakeDirectoryInformation.cmake"
   "app/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
@@ -128,6 +130,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "lgpio/CMakeFiles/lgpio.dir/DependInfo.cmake"
+  "lcd/CMakeFiles/lcd.dir/DependInfo.cmake"
   "hal/CMakeFiles/hal.dir/DependInfo.cmake"
   "app/CMakeFiles/beatbox.dir/DependInfo.cmake"
   )

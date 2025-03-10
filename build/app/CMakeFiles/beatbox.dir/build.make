@@ -114,11 +114,26 @@ app/CMakeFiles/beatbox.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/beatbox.dir/src/main.c.s"
 	cd /home/don/cmpt433/work/myApps/beatbox/build/app && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/don/cmpt433/work/myApps/beatbox/app/src/main.c -o CMakeFiles/beatbox.dir/src/main.c.s
 
+app/CMakeFiles/beatbox.dir/src/periodTimer.c.o: app/CMakeFiles/beatbox.dir/flags.make
+app/CMakeFiles/beatbox.dir/src/periodTimer.c.o: /home/don/cmpt433/work/myApps/beatbox/app/src/periodTimer.c
+app/CMakeFiles/beatbox.dir/src/periodTimer.c.o: app/CMakeFiles/beatbox.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object app/CMakeFiles/beatbox.dir/src/periodTimer.c.o"
+	cd /home/don/cmpt433/work/myApps/beatbox/build/app && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT app/CMakeFiles/beatbox.dir/src/periodTimer.c.o -MF CMakeFiles/beatbox.dir/src/periodTimer.c.o.d -o CMakeFiles/beatbox.dir/src/periodTimer.c.o -c /home/don/cmpt433/work/myApps/beatbox/app/src/periodTimer.c
+
+app/CMakeFiles/beatbox.dir/src/periodTimer.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/beatbox.dir/src/periodTimer.c.i"
+	cd /home/don/cmpt433/work/myApps/beatbox/build/app && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/don/cmpt433/work/myApps/beatbox/app/src/periodTimer.c > CMakeFiles/beatbox.dir/src/periodTimer.c.i
+
+app/CMakeFiles/beatbox.dir/src/periodTimer.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/beatbox.dir/src/periodTimer.c.s"
+	cd /home/don/cmpt433/work/myApps/beatbox/build/app && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/don/cmpt433/work/myApps/beatbox/app/src/periodTimer.c -o CMakeFiles/beatbox.dir/src/periodTimer.c.s
+
 # Object files for target beatbox
 beatbox_OBJECTS = \
 "CMakeFiles/beatbox.dir/src/audioMixer.c.o" \
 "CMakeFiles/beatbox.dir/src/beatbox.c.o" \
-"CMakeFiles/beatbox.dir/src/main.c.o"
+"CMakeFiles/beatbox.dir/src/main.c.o" \
+"CMakeFiles/beatbox.dir/src/periodTimer.c.o"
 
 # External object files for target beatbox
 beatbox_EXTERNAL_OBJECTS =
@@ -126,12 +141,16 @@ beatbox_EXTERNAL_OBJECTS =
 app/beatbox: app/CMakeFiles/beatbox.dir/src/audioMixer.c.o
 app/beatbox: app/CMakeFiles/beatbox.dir/src/beatbox.c.o
 app/beatbox: app/CMakeFiles/beatbox.dir/src/main.c.o
+app/beatbox: app/CMakeFiles/beatbox.dir/src/periodTimer.c.o
 app/beatbox: app/CMakeFiles/beatbox.dir/build.make
 app/beatbox: app/CMakeFiles/beatbox.dir/compiler_depend.ts
+app/beatbox: lgpio/liblgpio.a
+app/beatbox: lcd/liblcd.a
 app/beatbox: hal/libhal.a
+app/beatbox: lcd/liblcd.a
 app/beatbox: lgpio/liblgpio.a
 app/beatbox: app/CMakeFiles/beatbox.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable beatbox"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable beatbox"
 	cd /home/don/cmpt433/work/myApps/beatbox/build/app && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/beatbox.dir/link.txt --verbose=$(VERBOSE)
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold "Copying ARM executable to public NFS directory"
 	cd /home/don/cmpt433/work/myApps/beatbox/build/app && /usr/bin/cmake -E copy /home/don/cmpt433/work/myApps/beatbox/build/app/beatbox /home/don/cmpt433/public/myApps/beatbox

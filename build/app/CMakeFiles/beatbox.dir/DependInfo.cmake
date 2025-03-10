@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/don/cmpt433/work/myApps/beatbox/app/src/audioMixer.c" "app/CMakeFiles/beatbox.dir/src/audioMixer.c.o" "gcc" "app/CMakeFiles/beatbox.dir/src/audioMixer.c.o.d"
   "/home/don/cmpt433/work/myApps/beatbox/app/src/beatbox.c" "app/CMakeFiles/beatbox.dir/src/beatbox.c.o" "gcc" "app/CMakeFiles/beatbox.dir/src/beatbox.c.o.d"
   "/home/don/cmpt433/work/myApps/beatbox/app/src/main.c" "app/CMakeFiles/beatbox.dir/src/main.c.o" "gcc" "app/CMakeFiles/beatbox.dir/src/main.c.o.d"
+  "/home/don/cmpt433/work/myApps/beatbox/app/src/periodTimer.c" "app/CMakeFiles/beatbox.dir/src/periodTimer.c.o" "gcc" "app/CMakeFiles/beatbox.dir/src/periodTimer.c.o.d"
   "" "app/beatbox" "gcc" "app/CMakeFiles/beatbox.dir/link.d"
   )
 

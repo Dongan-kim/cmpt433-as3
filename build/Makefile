@@ -130,6 +130,19 @@ lgpio/fast:
 .PHONY : lgpio/fast
 
 #=============================================================================
+# Target rules for targets named lcd
+
+# Build rule for target.
+lcd: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lcd
+.PHONY : lcd
+
+# fast build rule for target.
+lcd/fast:
+	$(MAKE) $(MAKESILENT) -f lcd/CMakeFiles/lcd.dir/build.make lcd/CMakeFiles/lcd.dir/build
+.PHONY : lcd/fast
+
+#=============================================================================
 # Target rules for targets named hal
 
 # Build rule for target.
@@ -165,6 +178,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... beatbox"
 	@echo "... hal"
+	@echo "... lcd"
 	@echo "... lgpio"
 .PHONY : help
 

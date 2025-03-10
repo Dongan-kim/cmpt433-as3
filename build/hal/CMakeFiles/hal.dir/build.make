@@ -86,17 +86,33 @@ hal/CMakeFiles/hal.dir/src/joystick.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/hal.dir/src/joystick.c.s"
 	cd /home/don/cmpt433/work/myApps/beatbox/build/hal && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/don/cmpt433/work/myApps/beatbox/hal/src/joystick.c -o CMakeFiles/hal.dir/src/joystick.c.s
 
+hal/CMakeFiles/hal.dir/src/lcd_display.c.o: hal/CMakeFiles/hal.dir/flags.make
+hal/CMakeFiles/hal.dir/src/lcd_display.c.o: /home/don/cmpt433/work/myApps/beatbox/hal/src/lcd_display.c
+hal/CMakeFiles/hal.dir/src/lcd_display.c.o: hal/CMakeFiles/hal.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object hal/CMakeFiles/hal.dir/src/lcd_display.c.o"
+	cd /home/don/cmpt433/work/myApps/beatbox/build/hal && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT hal/CMakeFiles/hal.dir/src/lcd_display.c.o -MF CMakeFiles/hal.dir/src/lcd_display.c.o.d -o CMakeFiles/hal.dir/src/lcd_display.c.o -c /home/don/cmpt433/work/myApps/beatbox/hal/src/lcd_display.c
+
+hal/CMakeFiles/hal.dir/src/lcd_display.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/hal.dir/src/lcd_display.c.i"
+	cd /home/don/cmpt433/work/myApps/beatbox/build/hal && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/don/cmpt433/work/myApps/beatbox/hal/src/lcd_display.c > CMakeFiles/hal.dir/src/lcd_display.c.i
+
+hal/CMakeFiles/hal.dir/src/lcd_display.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/hal.dir/src/lcd_display.c.s"
+	cd /home/don/cmpt433/work/myApps/beatbox/build/hal && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/don/cmpt433/work/myApps/beatbox/hal/src/lcd_display.c -o CMakeFiles/hal.dir/src/lcd_display.c.s
+
 # Object files for target hal
 hal_OBJECTS = \
-"CMakeFiles/hal.dir/src/joystick.c.o"
+"CMakeFiles/hal.dir/src/joystick.c.o" \
+"CMakeFiles/hal.dir/src/lcd_display.c.o"
 
 # External object files for target hal
 hal_EXTERNAL_OBJECTS =
 
 hal/libhal.a: hal/CMakeFiles/hal.dir/src/joystick.c.o
+hal/libhal.a: hal/CMakeFiles/hal.dir/src/lcd_display.c.o
 hal/libhal.a: hal/CMakeFiles/hal.dir/build.make
 hal/libhal.a: hal/CMakeFiles/hal.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C static library libhal.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/don/cmpt433/work/myApps/beatbox/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C static library libhal.a"
 	cd /home/don/cmpt433/work/myApps/beatbox/build/hal && $(CMAKE_COMMAND) -P CMakeFiles/hal.dir/cmake_clean_target.cmake
 	cd /home/don/cmpt433/work/myApps/beatbox/build/hal && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hal.dir/link.txt --verbose=$(VERBOSE)
 

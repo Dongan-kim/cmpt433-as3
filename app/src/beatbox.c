@@ -12,7 +12,7 @@
 #define BPM_MAX 300
 
 static int bpm = BPM_DEFAULT;
-int currentMode; // 0: None, 1: Rock, 2: Custom
+static int mode; //Default is 1, 0: None, 1: Rock, 2: Custom
 static _Bool isRunning = true;
 static pthread_t beatThreadId;
 pthread_mutex_t beatMutex = PTHREAD_MUTEX_INITIALIZER;
@@ -62,28 +62,46 @@ int getBPM() {
     return currentBPM;
 }
 
-void setMode(int mode) {
+void setMode(int input_mode) {
     pthread_mutex_lock(&beatMutex);
-    if (mode >= 0 && mode <= 2) {
-        currentMode = mode;
+    if (input_mode >= 0 && input_mode <= 2) {
+        mode = input_mode;
     }
     pthread_mutex_unlock(&beatMutex);
+}
+
+int getMode() {
+    pthread_mutex_lock(&beatMutex);
+    int currentMode = mode;
+    pthread_mutex_unlock(&beatMutex);
+
+    return currentMode;
 }
 
 void* beatThread(void* arg) {
     (void)arg;
     while (isRunning) {
-        pthread_mutex_lock(&beatMutex);
-        int mode = currentMode;
-        pthread_mutex_unlock(&beatMutex);
+        int mode = getMode();
 
-        switch (mode) {
-            case 1: playRockBeat(); break;
-            case 2: playCustomBeat(); break;
-            default: usleep(500000); break; // No beat (sleep to avoid CPU usage)
+        if (mode == 1) {
+            playRockBeat();
+        } else if (mode == 2) {
+            playCustomBeat();
         }
     }
     return NULL;
+}
+
+void BeatBox_process() {
+    pthread_mutex_lock(&beatMutex);
+    int currentMode = mode;
+    pthread_mutex_unlock(&beatMutex);
+
+    if (currentMode == 1) {
+        playRockBeat();
+    } else if (currentMode == 2) {
+        playCustomBeat();
+    }
 }
 
 void playRockBeat() {
