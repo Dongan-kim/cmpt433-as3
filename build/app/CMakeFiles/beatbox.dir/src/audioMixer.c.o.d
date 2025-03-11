@@ -100,4 +100,5 @@ app/CMakeFiles/beatbox.dir/src/audioMixer.c.o: \
  /usr/include/limits.h /usr/include/aarch64-linux-gnu/bits/posix1_lim.h \
  /usr/include/aarch64-linux-gnu/bits/local_lim.h \
  /usr/include/linux/limits.h \
- /usr/include/aarch64-linux-gnu/bits/posix2_lim.h
+ /usr/include/aarch64-linux-gnu/bits/posix2_lim.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/include/periodTimer.h

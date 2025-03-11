@@ -1,4 +1,6 @@
+#define DEBOUNCE_DELAY_MS 50 
 #include "hal/joystick.h"
+#include "periodTimer.h"
 #include <gpiod.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -7,6 +9,7 @@
 #include <linux/i2c-dev.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 
 #define I2C_BUS "/dev/i2c-1"
@@ -16,12 +19,6 @@
 #define REG_CONFIG 0x01
 #define MUX_CHANNEL_Y 0x83C2
 static int i2c_file_desc;
-
-#define GPIO_CHIP "/dev/gpiochip2"
-#define GPIO_BUTTON 15  // GPIO Line for pressing in
-
-static struct gpiod_chip *chip;
-static struct gpiod_line *button_line;
 
 
 void joystick_init(void) {
@@ -35,21 +32,6 @@ void joystick_init(void) {
         perror("Unable to set I2C device to slave address");
         exit(EXIT_FAILURE);
     }
-
-    // Initialize GPIO for joystick button press
-    chip = gpiod_chip_open(GPIO_CHIP);
-    if (!chip) {
-        perror("Failed to open GPIO chip");
-        exit(EXIT_FAILURE);
-    }
-
-    button_line = gpiod_chip_get_line(chip, GPIO_BUTTON);
-    if (!button_line) {
-        perror("Failed to get GPIO line for joystick button");
-        exit(EXIT_FAILURE);
-    }
-
-    gpiod_line_request_input(button_line, "joystick_btn");
 }
 
 static void write_i2c_reg16(int i2c_file_desc, uint8_t reg_addr, uint16_t value) {
@@ -99,21 +81,7 @@ uint16_t read_joystick_y() {
     return read_i2c_reg16(i2c_file_desc, REG_CONVERSION);
 }
 
-int joystick_pressed() {
-    if (!button_line) {
-        return 0; // Button not initialized
-    }
-    
-    return gpiod_line_get_value(button_line) == 0;  // Active LOW
-}
-
 
 void joystick_cleanup(void) {
-    if (button_line) {
-        gpiod_line_release(button_line);
-    }
-    if (chip) {
-        gpiod_chip_close(chip);
-    }
     close(i2c_file_desc);
 }

@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <periodTimer.h>
 
 
 static snd_pcm_t *handle;
@@ -164,7 +165,8 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 	 */
 
 	pthread_mutex_lock(&audioMutex);
- 
+	
+	int foundSlot = 0;
 	// Insert the sound by searching for an empty sound bite slot
 	for (int i = 0; i < MAX_SOUND_BITES; i++) {
 		if (soundBites[i].pSound == NULL) {
@@ -173,6 +175,11 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 			break;
 		}
 	}
+
+	if (!foundSlot) {
+        soundBites[0].pSound = pSound;
+        soundBites[0].location = 0;
+    }
  
 	pthread_mutex_unlock(&audioMutex);
 }
@@ -316,12 +323,16 @@ void* playbackThread(void* _arg)
 {
 	(void)_arg;
 	while (!stopping) {
+
+		periodTimer_start(PERIOD_TIMER_AUDIO); 
 		// Generate next block of audio
 		fillPlaybackBuffer(playbackBuffer, playbackBufferSize);
 
 		// Output the audio
 		snd_pcm_sframes_t frames = snd_pcm_writei(handle,
 				playbackBuffer, playbackBufferSize);
+
+		periodTimer_stop(PERIOD_TIMER_AUDIO);
 
 		// Check for (and handle) possible error conditions on output
 		if (frames < 0) {

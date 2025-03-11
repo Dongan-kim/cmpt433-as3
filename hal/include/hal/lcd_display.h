@@ -9,6 +9,10 @@ void lcd_display_init(void);
 // Change the screen based on joystick press
 void lcd_display_screen(int screen);
 
+void setScreen(int screen);
+
+int getScreen();
+
 // Display beat name, volume, and BPM on Screen 1
 void lcd_display_status_screen(int mode, int bpm, int volume);
 

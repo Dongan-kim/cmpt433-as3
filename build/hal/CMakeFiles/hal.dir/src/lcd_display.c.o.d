@@ -18,6 +18,8 @@ hal/CMakeFiles/hal.dir/src/lcd_display.c.o: \
  /usr/include/aarch64-linux-gnu/bits/stdint-intn.h \
  /usr/include/aarch64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/aarch64-linux-gnu/bits/stdint-least.h \
+ /home/don/cmpt433/work/myApps/beatbox/hal/include/hal/rotary_encoder.h \
+ /usr/lib/gcc/aarch64-linux-gnu/14/include/stdbool.h \
  /home/don/cmpt433/work/myApps/beatbox/lcd/lib/Config/DEV_Config.h \
  /home/don/cmpt433/work/myApps/beatbox/lcd/lib/Config/Debug.h \
  /usr/include/stdio.h /usr/lib/gcc/aarch64-linux-gnu/14/include/stddef.h \

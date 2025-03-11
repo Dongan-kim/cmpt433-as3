@@ -1,4 +1,5 @@
 #include "hal/lcd_display.h"
+#include "hal/rotary_encoder.h"
 #include "DEV_Config.h"
 #include "LCD_1in54.h"
 #include "GUI_Paint.h"
@@ -51,6 +52,18 @@ void lcd_display_screen(int screen) {
     }
 }
 
+void setScreen(int screen) {
+    if (screen < 1 || screen > 3) {
+        printf("Invalid screen number: %d\n", screen);
+        return;
+    }
+    currentScreen = screen;
+}
+
+int getScreen() {
+    return currentScreen;
+}
+
 // ✅ Screen 1: Beat Name, BPM, and Volume
 void lcd_display_status_screen(int mode, int bpm, int volume) {
     Paint_NewImage(s_fb, LCD_1IN54_WIDTH, LCD_1IN54_HEIGHT, 0, WHITE, 16);
@@ -58,7 +71,7 @@ void lcd_display_status_screen(int mode, int bpm, int volume) {
 
     // Display Beat Name
     const char *modeNames[] = {"Rock", "Pop", "Jazz", "Electro"};
-    Paint_DrawString_EN(40, 30, modeNames[mode], &Font24, WHITE, BLACK);
+    Paint_DrawString_EN(90, 30, modeNames[mode], &Font24, WHITE, BLACK);
 
     // Display Volume and BPM
     char volText[20], bpmText[20];
@@ -66,7 +79,7 @@ void lcd_display_status_screen(int mode, int bpm, int volume) {
     snprintf(bpmText, sizeof(bpmText), "BPM: %d", bpm);
 
     Paint_DrawString_EN(10, 100, volText, &Font16, WHITE, BLACK);
-    Paint_DrawString_EN(100, 100, bpmText, &Font16, WHITE, BLACK);
+    Paint_DrawString_EN(140, 100, bpmText, &Font16, WHITE, BLACK);
 
     LCD_1IN54_Display(s_fb);
 }

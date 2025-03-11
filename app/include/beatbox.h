@@ -20,7 +20,11 @@ void setMode(int mode);
 
 int getMode();
 
-void BeatBox_process();
+//void cycleBeatMode();
+
+void playSnare();
+void playBassDrum();
+void playHiHat();
 
 extern pthread_mutex_t beatMutex;
 extern int currentMode; 

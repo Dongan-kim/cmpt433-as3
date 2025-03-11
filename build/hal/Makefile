@@ -154,6 +154,30 @@ src/joystick.c.s:
 	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick.c.s
 .PHONY : src/joystick.c.s
 
+src/joystick_press.o: src/joystick_press.c.o
+.PHONY : src/joystick_press.o
+
+# target to build an object file
+src/joystick_press.c.o:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick_press.c.o
+.PHONY : src/joystick_press.c.o
+
+src/joystick_press.i: src/joystick_press.c.i
+.PHONY : src/joystick_press.i
+
+# target to preprocess a source file
+src/joystick_press.c.i:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick_press.c.i
+.PHONY : src/joystick_press.c.i
+
+src/joystick_press.s: src/joystick_press.c.s
+.PHONY : src/joystick_press.s
+
+# target to generate assembly for a file
+src/joystick_press.c.s:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/joystick_press.c.s
+.PHONY : src/joystick_press.c.s
+
 src/lcd_display.o: src/lcd_display.c.o
 .PHONY : src/lcd_display.o
 
@@ -178,6 +202,30 @@ src/lcd_display.c.s:
 	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/lcd_display.c.s
 .PHONY : src/lcd_display.c.s
 
+src/rotary_encoder.o: src/rotary_encoder.c.o
+.PHONY : src/rotary_encoder.o
+
+# target to build an object file
+src/rotary_encoder.c.o:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/rotary_encoder.c.o
+.PHONY : src/rotary_encoder.c.o
+
+src/rotary_encoder.i: src/rotary_encoder.c.i
+.PHONY : src/rotary_encoder.i
+
+# target to preprocess a source file
+src/rotary_encoder.c.i:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/rotary_encoder.c.i
+.PHONY : src/rotary_encoder.c.i
+
+src/rotary_encoder.s: src/rotary_encoder.c.s
+.PHONY : src/rotary_encoder.s
+
+# target to generate assembly for a file
+src/rotary_encoder.c.s:
+	cd /home/don/cmpt433/work/myApps/beatbox/build && $(MAKE) $(MAKESILENT) -f hal/CMakeFiles/hal.dir/build.make hal/CMakeFiles/hal.dir/src/rotary_encoder.c.s
+.PHONY : src/rotary_encoder.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -190,9 +238,15 @@ help:
 	@echo "... src/joystick.o"
 	@echo "... src/joystick.i"
 	@echo "... src/joystick.s"
+	@echo "... src/joystick_press.o"
+	@echo "... src/joystick_press.i"
+	@echo "... src/joystick_press.s"
 	@echo "... src/lcd_display.o"
 	@echo "... src/lcd_display.i"
 	@echo "... src/lcd_display.s"
+	@echo "... src/rotary_encoder.o"
+	@echo "... src/rotary_encoder.i"
+	@echo "... src/rotary_encoder.s"
 .PHONY : help
 
 

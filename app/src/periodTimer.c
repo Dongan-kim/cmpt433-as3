@@ -38,6 +38,12 @@ void periodTimer_stop(periodTimer_t timer) {
     countTimes[timer]++;
 }
 
+unsigned long long periodTimer_getCurrentTimeMs(void) {
+    struct timespec now;
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    return ((unsigned long long)now.tv_sec * 1000) + (now.tv_nsec / 1000000);
+}
+
 double periodTimer_getMinTime(periodTimer_t timer) {
     return minTimes[timer];
 }

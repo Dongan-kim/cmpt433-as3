@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define BPM_DEFAULT 120
 #define BPM_MIN 40
@@ -92,17 +93,17 @@ void* beatThread(void* arg) {
     return NULL;
 }
 
-void BeatBox_process() {
-    pthread_mutex_lock(&beatMutex);
-    int currentMode = mode;
-    pthread_mutex_unlock(&beatMutex);
-
-    if (currentMode == 1) {
-        playRockBeat();
-    } else if (currentMode == 2) {
-        playCustomBeat();
-    }
-}
+// void cycleBeatMode() {
+//     currentMode = (currentMode % 3) + 1; // Cycle through modes: Rock (1), Custom (2), Off (3)
+    
+//     if (currentMode == 3) {
+//         setMode(0); // Mode 3 = OFF
+//         printf("Beat Mode OFF\n");
+//     } else {
+//         setMode(currentMode);
+//         printf("Beat Mode Changed: %d\n", currentMode);
+//     }
+// }
 
 void playRockBeat() {
     int localBPM;
@@ -112,20 +113,21 @@ void playRockBeat() {
     localBPM = bpm;
     pthread_mutex_unlock(&beatMutex);
 
-    double halfBeatTime = (60.0 / localBPM) / 2 * 1000000; // Convert to microseconds
+    double halfBeatTime = (60.0 / localBPM) / 2 * 1000000; 
+    if (halfBeatTime > 400000) halfBeatTime = 400000;  // for low BPM
 
-    AudioMixer_queueSound(&bassDrum);
-    AudioMixer_queueSound(&hiHat);
+    playBassDrum();
+    playHiHat();
     usleep(halfBeatTime);
 
-    AudioMixer_queueSound(&hiHat);
+    playHiHat();
     usleep(halfBeatTime);
 
-    AudioMixer_queueSound(&snare);
-    AudioMixer_queueSound(&hiHat);
+    playSnare();
+    playHiHat();
     usleep(halfBeatTime);
 
-    AudioMixer_queueSound(&hiHat);
+    playHiHat();
     usleep(halfBeatTime);
 }
 
@@ -138,12 +140,24 @@ void playCustomBeat() {
 
     double beatTime = (60.0 / localBPM) * 1000000; // Convert to microseconds
 
-    AudioMixer_queueSound(&hiHat);
+    playHiHat();
     usleep(beatTime / 4);
 
-    AudioMixer_queueSound(&bassDrum);
+    playBassDrum();
     usleep(beatTime / 2);
 
-    AudioMixer_queueSound(&snare);
+    playSnare();
     usleep(beatTime / 4);
+}
+
+void playSnare() {
+    AudioMixer_queueSound(&snare);
+}
+
+void playBassDrum() {
+    AudioMixer_queueSound(&bassDrum);
+}
+
+void playHiHat() {
+    AudioMixer_queueSound(&hiHat);
 }
