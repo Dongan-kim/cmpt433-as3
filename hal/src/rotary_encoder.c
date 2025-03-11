@@ -1,24 +1,31 @@
 #define _POSIX_C_SOURCE 199309L  // Enable CLOCK_MONOTONIC
 #define _XOPEN_SOURCE 700 
+
+#include <unistd.h>
 #include <stdio.h>
 #include <pthread.h>
 #include <gpiod.h>
 #include <time.h>
-#include <unistd.h>
+#include <limits.h>
 #include "hal/rotary_encoder.h"
+#include "periodTimer.h"
 #include "beatbox.h"
 #include "audioMixer.h"
 
 
 #define GPIO_CHIP "/dev/gpiochip2"
+#define GPIO_CHIP_BUTTON "/dev/gpiochip0"
 #define GPIO_A 7  // GPIO16 -> A signal
 #define GPIO_B 8  // GPIO17 -> B signal
+#define GPIO_BUTTON 10
 #define DEBOUNCE_DELAY 500
 #define MIN_BPM 40
 #define MAX_BPM 300
 
 static struct gpiod_chip *chip;
+static struct gpiod_chip *chipButton;
 static struct gpiod_line *lineA, *lineB;
+static struct gpiod_line *buttonLine;  // Rotary button line
 static pthread_mutex_t encoderMutex = PTHREAD_MUTEX_INITIALIZER;
 static int encoderValue = 120;  // Default bpm
 static int lastA = 0, lastB = 0;
@@ -40,8 +47,16 @@ void RotaryEncoder_init(void) {
         return;
     }
 
+    chipButton = gpiod_chip_open(GPIO_CHIP_BUTTON);
+    if (!chipButton) {
+        perror("Failed to open GPIO chip for button");
+        return;
+    }
+
     lineA = gpiod_chip_get_line(chip, GPIO_A);
     lineB = gpiod_chip_get_line(chip, GPIO_B);
+    buttonLine = gpiod_chip_get_line(chipButton, GPIO_BUTTON);  // for push the rotary
+
     if (!lineA || !lineB) {
         perror("Failed to get GPIO lines for encoder");
         return;
@@ -49,6 +64,7 @@ void RotaryEncoder_init(void) {
 
     gpiod_line_request_input(lineA, "encoderA");
     gpiod_line_request_input(lineB, "encoderB");
+    gpiod_line_request_input(buttonLine, "encoderButton");
 
     lastA = gpiod_line_get_value(lineA);
     lastB = gpiod_line_get_value(lineB);
@@ -59,6 +75,12 @@ void RotaryEncoder_init(void) {
         perror("Failed to create Rotary Encoder thread");
     }
     pthread_detach(encoderThreadId);
+
+    pthread_t buttonThreadId;
+    if (pthread_create(&buttonThreadId, NULL, RotaryEncoder_buttonListener, NULL) != 0) {
+        perror("Failed to create Rotary Encoder Button thread");
+    }
+    pthread_detach(buttonThreadId); 
 }
 
 int RotaryEncoder_getRotation(void) {
@@ -131,6 +153,35 @@ void *RotaryEncoder_listen(void *arg) {
     return NULL;
 }
 
+void *RotaryEncoder_buttonListener(void *arg) {
+    (void)arg;
+
+    struct timespec req = {0, 100000000L};
+
+    while (1) {
+        if (RotaryEncoder_buttonPressed()) {
+            cycleBeatMode();  // Function to cycle through drum modes
+        }
+        nanosleep(&req, NULL);
+    }
+
+    return NULL;
+}
+
+int RotaryEncoder_buttonPressed(void) {
+    static long lastPressTime = 0;
+    long currentTime = getCurrentTimeUs();
+
+    int buttonState = gpiod_line_get_value(buttonLine);
+    
+    // If button is pressed (LOW) and debounce delay has passed
+    if (buttonState == 0 && (currentTime - lastPressTime) > 200000) { // 200ms debounce
+        lastPressTime = currentTime;
+        return 1;  // Button pressed
+    }
+    return 0;  // No press detected
+}
+
 // Get current encoder value
 int RotaryEncoder_getValue(void) {
     pthread_mutex_lock(&encoderMutex);
@@ -143,4 +194,5 @@ void RotaryEncoder_cleanup(void) {
     gpiod_line_release(lineA);
     gpiod_line_release(lineB);
     gpiod_chip_close(chip);
+    gpiod_chip_close(chipButton);
 }

@@ -28,7 +28,7 @@ static short *playbackBuffer = NULL;
 
 
 // Currently active (waiting to be played) sound bites
-#define MAX_SOUND_BITES 30
+#define MAX_SOUND_BITES 100
 typedef struct {
 	// A pointer to a previously allocated sound bite (wavedata_t struct).
 	// Note that many different sound-bite slots could share the same pointer
@@ -172,13 +172,13 @@ void AudioMixer_queueSound(wavedata_t *pSound)
 		if (soundBites[i].pSound == NULL) {
 			soundBites[i].pSound = pSound;
 			soundBites[i].location = 0;
+			foundSlot = 1;
 			break;
 		}
 	}
 
 	if (!foundSlot) {
-        soundBites[0].pSound = pSound;
-        soundBites[0].location = 0;
+	printf("Error: No available slots for new sound! Sound lost");
     }
  
 	pthread_mutex_unlock(&audioMutex);

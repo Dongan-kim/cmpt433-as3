@@ -49,8 +49,9 @@ app/CMakeFiles/beatbox.dir/src/main.c.o: \
  /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/joystick_press.h \
  /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/lcd_display.h \
  /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/rotary_encoder.h \
- /usr/lib/gcc/aarch64-linux-gnu/14/include/stdbool.h /usr/include/stdio.h \
- /usr/lib/gcc/aarch64-linux-gnu/14/include/stdarg.h \
+ /usr/lib/gcc/aarch64-linux-gnu/14/include/stdbool.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/accelerometer.h \
+ /usr/include/stdio.h /usr/lib/gcc/aarch64-linux-gnu/14/include/stdarg.h \
  /usr/include/aarch64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__fpos64_t.h \

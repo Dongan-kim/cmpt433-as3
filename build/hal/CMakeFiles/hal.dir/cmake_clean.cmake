@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/hal.dir/src/accelerometer.c.o"
+  "CMakeFiles/hal.dir/src/accelerometer.c.o.d"
   "CMakeFiles/hal.dir/src/joystick.c.o"
   "CMakeFiles/hal.dir/src/joystick.c.o.d"
   "CMakeFiles/hal.dir/src/joystick_press.c.o"

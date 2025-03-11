@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/don/cmpt433/work/myApps/beatbox/hal/src/accelerometer.c" "hal/CMakeFiles/hal.dir/src/accelerometer.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/accelerometer.c.o.d"
   "/home/don/cmpt433/work/myApps/beatbox/hal/src/joystick.c" "hal/CMakeFiles/hal.dir/src/joystick.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/joystick.c.o.d"
   "/home/don/cmpt433/work/myApps/beatbox/hal/src/joystick_press.c" "hal/CMakeFiles/hal.dir/src/joystick_press.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/joystick_press.c.o.d"
   "/home/don/cmpt433/work/myApps/beatbox/hal/src/lcd_display.c" "hal/CMakeFiles/hal.dir/src/lcd_display.c.o" "gcc" "hal/CMakeFiles/hal.dir/src/lcd_display.c.o.d"

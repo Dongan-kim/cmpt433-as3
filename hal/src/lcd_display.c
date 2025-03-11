@@ -70,8 +70,12 @@ void lcd_display_status_screen(int mode, int bpm, int volume) {
     Paint_Clear(WHITE);
 
     // Display Beat Name
-    const char *modeNames[] = {"Rock", "Pop", "Jazz", "Electro"};
-    Paint_DrawString_EN(90, 30, modeNames[mode], &Font24, WHITE, BLACK);
+    const char *modeNames[] = {"None", "Rock", "Custom"};
+    int modeIndex = mode;
+    if (modeIndex < 0 || modeIndex > 2) {
+        modeIndex = 2;
+    }
+    Paint_DrawString_EN(90, 30, modeNames[modeIndex], &Font24, WHITE, BLACK);
 
     // Display Volume and BPM
     char volText[20], bpmText[20];

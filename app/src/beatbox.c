@@ -93,17 +93,16 @@ void* beatThread(void* arg) {
     return NULL;
 }
 
-// void cycleBeatMode() {
-//     currentMode = (currentMode % 3) + 1; // Cycle through modes: Rock (1), Custom (2), Off (3)
+void cycleBeatMode() {
+    int currentMode = getMode();
+    currentMode = (currentMode % 3) + 1; // Cycle through modes: Rock (1), Custom (2), Off (3)
     
-//     if (currentMode == 3) {
-//         setMode(0); // Mode 3 = OFF
-//         printf("Beat Mode OFF\n");
-//     } else {
-//         setMode(currentMode);
-//         printf("Beat Mode Changed: %d\n", currentMode);
-//     }
-// }
+    if (currentMode == 3) {
+        setMode(0); // Mode 3 = OFF
+    } else {
+        setMode(currentMode);
+    }
+}
 
 void playRockBeat() {
     int localBPM;
@@ -114,7 +113,6 @@ void playRockBeat() {
     pthread_mutex_unlock(&beatMutex);
 
     double halfBeatTime = (60.0 / localBPM) / 2 * 1000000; 
-    if (halfBeatTime > 400000) halfBeatTime = 400000;  // for low BPM
 
     playBassDrum();
     playHiHat();

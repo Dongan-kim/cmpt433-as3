@@ -20,7 +20,7 @@ void setMode(int mode);
 
 int getMode();
 
-//void cycleBeatMode();
+void cycleBeatMode();
 
 void playSnare();
 void playBassDrum();
