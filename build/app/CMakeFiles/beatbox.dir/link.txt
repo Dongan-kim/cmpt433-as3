@@ -1,1 +1,0 @@
-/usr/bin/cc -fsanitize=address -Wl,--dependency-file=CMakeFiles/beatbox.dir/link.d CMakeFiles/beatbox.dir/src/audioMixer.c.o CMakeFiles/beatbox.dir/src/beatbox.c.o CMakeFiles/beatbox.dir/src/main.c.o CMakeFiles/beatbox.dir/src/periodTimer.c.o -o beatbox  ../lgpio/liblgpio.a ../lcd/liblcd.a ../hal/libhal.a -lgpiod -lasound ../lcd/liblcd.a ../lgpio/liblgpio.a

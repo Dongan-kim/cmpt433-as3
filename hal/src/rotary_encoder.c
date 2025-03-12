@@ -170,16 +170,22 @@ void *RotaryEncoder_buttonListener(void *arg) {
 
 int RotaryEncoder_buttonPressed(void) {
     static long lastPressTime = 0;
-    long currentTime = getCurrentTimeUs();
+    static int lastButtonState = 1;  // Assume HIGH (not pressed) initially
 
+    long currentTime = getCurrentTimeUs();
     int buttonState = gpiod_line_get_value(buttonLine);
-    
-    // If button is pressed (LOW) and debounce delay has passed
-    if (buttonState == 0 && (currentTime - lastPressTime) > 200000) { // 200ms debounce
-        lastPressTime = currentTime;
-        return 1;  // Button pressed
+
+    // Detect Falling Edge (Button Pressed)
+    if (lastButtonState == 1 && buttonState == 0) {  
+        if ((currentTime - lastPressTime) > 200000) {  // 200ms debounce
+            lastPressTime = currentTime;
+            lastButtonState = buttonState;
+            return 1;  // Button press detected
+        }
     }
-    return 0;  // No press detected
+
+    lastButtonState = buttonState;
+    return 0;  // No button press detected
 }
 
 // Get current encoder value

@@ -57,9 +57,6 @@ int main() {
         if (currentTime - lastPrintTime >= 1000) {
             lastPrintTime = currentTime;
             int mode = getMode();
-            if(mode == 0){
-                accelerometer_start();
-            }
             int bpm = getBPM();
             int volume = AudioMixer_getVolume();
             printf("Current Mode: %d | BPM: %d | Volume: %d\n", mode, bpm, volume);
