@@ -8,11 +8,11 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define BPM_DEFAULT 120
+//#define BPM_DEFAULT 120
 #define BPM_MIN 40
 #define BPM_MAX 300
 
-static int bpm = BPM_DEFAULT;
+static int bpm;
 static int mode; //Default is 1, 0: None, 1: Rock, 2: Custom
 static _Bool isRunning = true;
 static pthread_t beatThreadId;

@@ -29,7 +29,7 @@ static struct gpiod_chip *chipButton;
 static struct gpiod_line *lineA, *lineB;
 static struct gpiod_line *buttonLine;  // Rotary button line
 static pthread_mutex_t encoderMutex = PTHREAD_MUTEX_INITIALIZER;
-static int encoderValue = 120;  // Default bpm
+static int encoderValue;
 static int lastA = 0, lastB = 0;
 static int lastState = 0;  // Stores previous state to prevent counting half steps
 static int halfStepDetected = 0;  // Flags if halfway movement was detected
@@ -141,18 +141,22 @@ int RotaryEncoder_getRotation(void) {
 //Thread function to track rotary encoder rotation
 void *RotaryEncoder_listen(void *arg) {
     (void)arg;
+
     while (1) {
-        int rotation = RotaryEncoder_getRotation();
+        int rotation = RotaryEncoder_getRotation();  // Get rotary movement
 
+        if (rotation != 0) { 
+            pthread_mutex_lock(&encoderMutex);
+            encoderValue = getBPM();  // Get the latest BPM (could be from UDP)
+            encoderValue += rotation; // Apply rotation change
 
-        pthread_mutex_lock(&encoderMutex);
-        if (rotation != 0) {
-            encoderValue += rotation;
+            // Ensure BPM stays within bounds
             if (encoderValue < MIN_BPM) encoderValue = MIN_BPM;
             if (encoderValue > MAX_BPM) encoderValue = MAX_BPM;
-        }
 
-        pthread_mutex_unlock(&encoderMutex);
+            setBPM(encoderValue); // Apply the new BPM
+            pthread_mutex_unlock(&encoderMutex);
+        }
     }
     return NULL;
 }
@@ -198,12 +202,12 @@ int RotaryEncoder_buttonPressed(void) {
 }
 
 // Get current encoder value
-int RotaryEncoder_getValue(void) {
-    pthread_mutex_lock(&encoderMutex);
-    int value = encoderValue;
-    pthread_mutex_unlock(&encoderMutex);
-    return value;
-}
+// int RotaryEncoder_getValue(void) {
+//     pthread_mutex_lock(&encoderMutex);
+//     setBPM(encoderValue);
+//     pthread_mutex_unlock(&encoderMutex);
+//     return value;
+// }
 
 void RotaryEncoder_cleanup(void) {
     gpiod_line_release(lineA);

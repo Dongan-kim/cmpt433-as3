@@ -97,11 +97,6 @@ int main() {
             }
         }
 
-        int new_bpm = RotaryEncoder_getValue();
-        if(new_bpm != getBPM()){
-            setBPM(new_bpm);
-        }
-
     }
     
     // Cleanup

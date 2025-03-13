@@ -8,7 +8,7 @@ extern volatile int rotaryButtonPressed;
 void RotaryEncoder_init(void);
 
 // Get the current rotary encoder value
-int RotaryEncoder_getValue(void);
+//int RotaryEncoder_getValue(void);
 
 // Listen for rotary encoder events (runs in a separate thread)
 void *RotaryEncoder_listen(void *arg);
