@@ -324,15 +324,13 @@ void* playbackThread(void* _arg)
 	(void)_arg;
 	while (!stopping) {
 
-		periodTimer_start(PERIOD_TIMER_AUDIO); 
+		Period_markEvent(PERIOD_EVENT_AUDIO_BUFFER_FILL);
 		// Generate next block of audio
 		fillPlaybackBuffer(playbackBuffer, playbackBufferSize);
 
 		// Output the audio
 		snd_pcm_sframes_t frames = snd_pcm_writei(handle,
 				playbackBuffer, playbackBufferSize);
-
-		periodTimer_stop(PERIOD_TIMER_AUDIO);
 
 		// Check for (and handle) possible error conditions on output
 		if (frames < 0) {

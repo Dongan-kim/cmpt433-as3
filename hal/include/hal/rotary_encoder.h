@@ -2,6 +2,7 @@
 #define ROTARY_ENCODER_H
 
 #include <stdbool.h>
+extern volatile int rotaryButtonPressed;
 
 // Initialize the rotary encoder
 void RotaryEncoder_init(void);

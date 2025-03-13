@@ -1,0 +1,2 @@
+/usr/bin/ar qc libhal.a CMakeFiles/hal.dir/src/accelerometer.c.o CMakeFiles/hal.dir/src/joystick.c.o CMakeFiles/hal.dir/src/joystick_press.c.o CMakeFiles/hal.dir/src/lcd_display.c.o CMakeFiles/hal.dir/src/rotary_encoder.c.o
+/usr/bin/ranlib libhal.a

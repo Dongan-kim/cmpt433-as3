@@ -34,3 +34,9 @@ add_custom_command(TARGET beatbox POST_BUILD
      "${CMAKE_SOURCE_DIR}/beatbox-wave-files"
      "$ENV{HOME}/cmpt433/public/myApps/beatbox-wave-files" 
   COMMENT "Copying WAVE files to public NFS directory")
+
+  add_custom_command(TARGET beatbox POST_BUILD 
+  COMMAND "${CMAKE_COMMAND}" -E copy_directory
+     "${CMAKE_SOURCE_DIR}/as3-server"
+     "$ENV{HOME}/cmpt433/public/myApps/beatbox-server-copy" 
+  COMMENT "Copying server files to public NFS directory")

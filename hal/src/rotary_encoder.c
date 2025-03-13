@@ -3,6 +3,8 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <pthread.h>
 #include <gpiod.h>
 #include <time.h>
@@ -32,6 +34,8 @@ static int lastA = 0, lastB = 0;
 static int lastState = 0;  // Stores previous state to prevent counting half steps
 static int halfStepDetected = 0;  // Flags if halfway movement was detected
 static long lastTimeUs = 0; // Last timestamp in microseconds
+
+volatile int rotaryButtonPressed = 0;
 
 //Helper function: Get current time in microseconds
 static long getCurrentTimeUs() {
@@ -174,9 +178,13 @@ int RotaryEncoder_buttonPressed(void) {
 
     long currentTime = getCurrentTimeUs();
     int buttonState = gpiod_line_get_value(buttonLine);
+    if(buttonState == 0){
+        rotaryButtonPressed = 1;
+        //printf("pressed!\n");
+    }
 
     // Detect Falling Edge (Button Pressed)
-    if (lastButtonState == 1 && buttonState == 0) {  
+    if (lastButtonState == 1 && buttonState == 0) {
         if ((currentTime - lastPressTime) > 200000) {  // 200ms debounce
             lastPressTime = currentTime;
             lastButtonState = buttonState;
@@ -185,6 +193,7 @@ int RotaryEncoder_buttonPressed(void) {
     }
 
     lastButtonState = buttonState;
+    rotaryButtonPressed = 0;
     return 0;  // No button press detected
 }
 

@@ -40,15 +40,21 @@ void lcd_display_screen(int screen) {
     if (screen == 1) {
         lcd_display_status_screen(getMode(), getBPM(), AudioMixer_getVolume());
     } else if (screen == 2) {
+        Period_statistics_t audioStats;
+        Period_getStatisticsAndClear(PERIOD_EVENT_AUDIO_BUFFER_FILL, &audioStats);
+
         lcd_display_timing_screen("Audio Timing",
-            periodTimer_getMinTime(PERIOD_TIMER_AUDIO),
-            periodTimer_getMaxTime(PERIOD_TIMER_AUDIO),
-            periodTimer_getAvgTime(PERIOD_TIMER_AUDIO));
+            audioStats.minPeriodInMs,
+            audioStats.maxPeriodInMs,
+            audioStats.avgPeriodInMs);
     } else if (screen == 3) {
+        Period_statistics_t accelStats;
+        Period_getStatisticsAndClear(PERIOD_EVENT_ACCELEROMETER_SAMPLE, &accelStats);
+
         lcd_display_timing_screen("Accel. Timing",
-            periodTimer_getMinTime(PERIOD_TIMER_ACCEL),
-            periodTimer_getMaxTime(PERIOD_TIMER_ACCEL),
-            periodTimer_getAvgTime(PERIOD_TIMER_ACCEL));
+            accelStats.minPeriodInMs,
+            accelStats.maxPeriodInMs,
+            accelStats.avgPeriodInMs);
     }
 }
 

@@ -6,10 +6,12 @@
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 #include <pthread.h>
+#include <math.h>
 #include "audioMixer.h"
 #include "beatbox.h"
 #include "hal/accelerometer.h"
 #include "periodTimer.h"
+#include "hal/rotary_encoder.h"
 
 #define I2C_BUS "/dev/i2c-1"
 #define ACCEL_ADDR 0x19
@@ -17,21 +19,20 @@
 #define CTRL1_REG 0x20
 #define CTRL6_REG 0x25
 #define OUTX_L 0x28
-// #define OUTX_H 0x29
-// #define OUTY_L 0x2A
-// #define OUTY_H 0x2B
-// #define OUTZ_L 0x2C
-// #define OUTZ_H 0x2D
 
 // Thresholds for detecting air drumming movement
-#define THRESHOLD_X 12000 
-#define THRESHOLD_Y 8000
-#define THRESHOLD_Z 12000
-#define DEAD_ZONE 20000  // Ignore small variations below this value
+#define THRESHOLD_X 0.8
+#define THRESHOLD_Y 0.8
+#define THRESHOLD_Z 1.8
 
-#define DEBOUNCE_TIME_X 400 // Longer debounce time for X-axis
-#define DEBOUNCE_TIME_Y 300 // Medium debounce time for Y-axis
-#define DEBOUNCE_TIME_Z 350 // Shorter debounce time for Z-axis
+#define ROTARY_PRESS_THRESHOLD_X 4.0
+#define ROTARY_PRESS_THRESHOLD_Y 4.0
+#define ROTARY_PRESS_THRESHOLD_Z 5.0
+
+
+#define DEBOUNCE_TIME_X 300 
+#define DEBOUNCE_TIME_Y 200 
+#define DEBOUNCE_TIME_Z 100
 
 static int i2c_fd;
 static pthread_t accelThread;
@@ -110,60 +111,74 @@ void *accelerometer_listener(void *arg) {
     (void)arg;
 
     long lastXTime = 0, lastYTime = 0, lastZTime = 0;
-    int16_t prevX = 0, prevY = 0, prevZ = 0;
+    static int baselineInitialized = 0; 
 
-    // **Ensure accelerometer is working**
-    if (read_accel_data(&prevX, &prevY, &prevZ) == -1) {
-        perror("Failed to initialize accelerometer readings");
-        return NULL;
-    }
+    int16_t baseX = 0, baseY = 0, baseZ = 0;
+    if(!baselineInitialized){
+        // **Ensure accelerometer is working**
+        if (read_accel_data(&baseX, &baseY, &baseZ) == -1) {
+            perror("Failed to initialize accelerometer readings");
+            return NULL;
+        }
+        baselineInitialized = 1;
+    } 
 
     while (running) {
+        if(rotaryButtonPressed == 1){
+            usleep(10000);
+        }
+
         if (i2c_fd == -1) {
             usleep(100000);
             continue;
         }
 
         int16_t x, y, z;
+        Period_markEvent(PERIOD_EVENT_ACCELEROMETER_SAMPLE);
         if (read_accel_data(&x, &y, &z) == -1) {
             continue;
         }
 
+        float thresholdX = THRESHOLD_X;
+        float thresholdY = THRESHOLD_Y;
+        float thresholdZ = THRESHOLD_Z;
+
         long currentTime = periodTimer_getCurrentTimeMs();
 
-        float xG = x / 16384.0;
-        float yG = y / 16384.0;
-        float zG = z / 16384.0;
+        float basexG = basexG / 16384.0;
+        float baseyG = baseyG / 16384.0;
+        float basezG = basezG / 16384.0;
 
-        int16_t deltaX = abs(x - prevX);
-        int16_t deltaY = abs(y - prevY);
-        int16_t deltaZ = abs(z - prevZ);
 
-        // **Apply Debounce & Dead Zones**
-        if (deltaX > THRESHOLD_X && deltaX > DEAD_ZONE && (currentTime - lastXTime > DEBOUNCE_TIME_X)) {
-            printf("🥁 Air-Drum X (Snare)");
-            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+        float xG = (x / 16384.0) - basexG;
+        float yG = (y / 16384.0) - baseyG;
+        float zG = (z / 16384.0) - basezG;
+
+        if(rotaryButtonPressed != 1){
+        if (fabs(xG) > thresholdX && (currentTime - lastXTime > DEBOUNCE_TIME_X)) {
+            //printf("🥁 Air-Drum X (Snare)");
+            //printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+            //printf("rotaryButtonPressed: %d", rotaryButtonPressed);
             playSnare();
             lastXTime = currentTime;
-            prevX = x; 
         }
 
-        if (deltaY > THRESHOLD_Y && deltaY > DEAD_ZONE && (currentTime - lastYTime > DEBOUNCE_TIME_Y)) {
-            printf("🥁 Air-Drum Y (HiHat)");
-            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+        if (fabs(yG) > thresholdY && (currentTime - lastYTime > DEBOUNCE_TIME_Y)) {
+            //printf("🥁 Air-Drum Y (HiHat)");
+            //printf("rotaryButtonPressed: %d", rotaryButtonPressed);
+            //printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
             playHiHat();
-            lastYTime = currentTime;
-            prevY = y;  
+            lastYTime = currentTime;  
         }
 
-        if (deltaZ > THRESHOLD_Z && deltaZ > DEAD_ZONE && (currentTime - lastZTime > DEBOUNCE_TIME_Z)) {
-            printf("🥁 Air-Drum Z (Bass Drum)");
-            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+        if (fabs(zG) > thresholdZ && (currentTime - lastZTime > DEBOUNCE_TIME_Z)) {
+            //printf("🥁 Air-Drum Z (Bass Drum)");
+            //printf("rotaryButtonPressed: %d", rotaryButtonPressed);
+            //printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
             playBassDrum();
-            lastZTime = currentTime;
-            prevZ = z;  
+            lastZTime = currentTime; 
         }
-
+        }
         usleep(10000); // **100Hz polling rate**
     }
     return NULL;

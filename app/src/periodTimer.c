@@ -1,66 +1,155 @@
-#define _POSIX_C_SOURCE 200809L
-#include "periodTimer.h"
-#include "hal/lcd_display.h"
+#define _GNU_SOURCE
+#include <assert.h>
+#include <pthread.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include <stdbool.h>
+#include <string.h>
+#include "periodTimer.h"
 
-static struct timespec startTimes[PERIOD_TIMER_COUNT];
-static double minTimes[PERIOD_TIMER_COUNT] = {9999, 9999};
-static double maxTimes[PERIOD_TIMER_COUNT] = {0, 0};
-static double totalTimes[PERIOD_TIMER_COUNT] = {0, 0};
-static int countTimes[PERIOD_TIMER_COUNT] = {0, 0};
+// Written by Brian Fraser
 
-void periodTimer_init(void) {
-    for (int i = 0; i < PERIOD_TIMER_COUNT; i++) {
-        minTimes[i] = 9999;
-        maxTimes[i] = 0;
-        totalTimes[i] = 0;
-        countTimes[i] = 0;
+// Data collected
+typedef struct {
+    // Store the timestamp samples each time we mark an event.
+    long timestampCount;
+    long long timestampsInNs[MAX_EVENT_TIMESTAMPS];
+
+    // Used for recording the event between analysis periods.
+    long long prevTimestampInNs;
+} timestamps_t;
+static timestamps_t s_eventData[NUM_PERIOD_EVENTS];
+
+static pthread_mutex_t s_lock = PTHREAD_MUTEX_INITIALIZER;
+static bool s_initialized = false;
+
+
+// Prototypes
+static void updateStats(
+    timestamps_t *pData, 
+    Period_statistics_t *pStats
+);
+static long long getTimeInNanoS(void);
+
+
+void Period_init(void)
+{
+    memset(s_eventData, 0, sizeof(s_eventData[0]) * NUM_PERIOD_EVENTS);
+    s_initialized = true;
+}
+void Period_cleanup(void)
+{
+    // nothing
+    s_initialized = false;
+}
+
+void Period_markEvent(enum Period_whichEvent whichEvent)
+{
+    assert (whichEvent >= 0 && whichEvent < NUM_PERIOD_EVENTS);
+    assert (s_initialized);
+
+    timestamps_t *pData = &s_eventData[whichEvent];
+    pthread_mutex_lock(&s_lock);
+    {
+        if (pData->timestampCount < MAX_EVENT_TIMESTAMPS) {
+            pData->timestampsInNs[pData->timestampCount] = getTimeInNanoS();
+            pData->timestampCount++;
+        } else {
+            printf("WARNING: No sample space for event collection on %d\n", whichEvent);
+        }
     }
+    pthread_mutex_unlock(&s_lock);
 }
 
-void periodTimer_start(periodTimer_t timer) {
-    clock_gettime(CLOCK_MONOTONIC, &startTimes[timer]);
+void Period_getStatisticsAndClear(
+    enum Period_whichEvent whichEvent,
+    Period_statistics_t *pStats
+)
+{
+    assert (whichEvent >= 0 && whichEvent < NUM_PERIOD_EVENTS);
+    assert (s_initialized);
+    timestamps_t *pData = &s_eventData[whichEvent];
+    pthread_mutex_lock(&s_lock);
+    {
+        // Compute stats
+        updateStats(pData, pStats);
+
+        // Update the "previous" sample (if we have any)
+        if (pData->timestampCount > 0) {
+            pData->prevTimestampInNs = pData->timestampsInNs[pData->timestampCount - 1];
+        }
+
+        // Clear
+        pData->timestampCount = 0;
+    }
+    pthread_mutex_unlock(&s_lock);
 }
 
-void periodTimer_stop(periodTimer_t timer) {
-    struct timespec end;
-    clock_gettime(CLOCK_MONOTONIC, &end);
+static void updateStats(
+    timestamps_t *pData, 
+    Period_statistics_t *pStats
+)
+{
+    long long prevInNs = pData->prevTimestampInNs;
 
-    double elapsed = (end.tv_sec - startTimes[timer].tv_sec) * 1000.0;
-    elapsed += (end.tv_nsec - startTimes[timer].tv_nsec) / 1000000.0;
+    // Handle startup (no previous sample)
+    if (prevInNs == 0) {
+        prevInNs = pData->timestampsInNs[0];
+    }
+    
+    // Find min/max/sum time delta between consecutive samples
+    long long sumDeltasNs = 0;
+    long long minNs = 0;
+    long long maxNs = 0;
+    for (int i = 0; i < pData->timestampCount; i++) {
+        long long thisTime = pData->timestampsInNs[i];
+        long long deltaNs = thisTime - prevInNs;
+        sumDeltasNs += deltaNs;
 
-    if (elapsed < minTimes[timer]) minTimes[timer] = elapsed;
-    if (elapsed > maxTimes[timer]) maxTimes[timer] = elapsed;
+        if (i == 0 || deltaNs < minNs) {
+            minNs = deltaNs;
+        }
+        if (i == 0 || deltaNs > maxNs) {
+            maxNs = deltaNs;
+        }
 
-    totalTimes[timer] += elapsed;
-    countTimes[timer]++;
+        prevInNs = thisTime;
+    }
+
+    long long avgNs = 0;
+    if (pData->timestampCount > 0) {
+        avgNs = sumDeltasNs / pData->timestampCount;
+    } 
+
+    // Save stats
+    #define MS_PER_NS (1000*1000.0)
+    pStats->minPeriodInMs = minNs / MS_PER_NS;
+    pStats->maxPeriodInMs = maxNs / MS_PER_NS;
+    pStats->avgPeriodInMs = avgNs / MS_PER_NS;
+    pStats->numSamples = pData->timestampCount;
+}
+
+
+
+
+
+// Timing function
+static long long getTimeInNanoS(void) 
+{
+    struct timespec spec;
+    clock_gettime(CLOCK_BOOTTIME, &spec);
+    long long seconds = spec.tv_sec;
+    long long nanoSeconds = spec.tv_nsec + seconds * 1000*1000*1000;
+	assert(nanoSeconds > 0);
+    
+    static long long lastTimeHack = 0;
+    assert(nanoSeconds > lastTimeHack);
+    lastTimeHack = nanoSeconds;
+
+    return nanoSeconds;
 }
 
 unsigned long long periodTimer_getCurrentTimeMs(void) {
     struct timespec now;
     clock_gettime(CLOCK_MONOTONIC, &now);
     return ((unsigned long long)now.tv_sec * 1000) + (now.tv_nsec / 1000000);
-}
-
-double periodTimer_getMinTime(periodTimer_t timer) {
-    return minTimes[timer];
-}
-
-double periodTimer_getMaxTime(periodTimer_t timer) {
-    return maxTimes[timer];
-}
-
-double periodTimer_getAvgTime(periodTimer_t timer) {
-    return (countTimes[timer] > 0) ? (totalTimes[timer] / countTimes[timer]) : 0;
-}
-
-void periodTimer_cleanup(void) {
-    for (int i = 0; i < PERIOD_TIMER_COUNT; i++) {
-        minTimes[i] = 9999;
-        maxTimes[i] = 0;
-        totalTimes[i] = 0;
-        countTimes[i] = 0;
-    }
 }
