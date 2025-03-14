@@ -18,7 +18,7 @@ static _Bool isRunning = true;
 static pthread_t beatThreadId;
 pthread_mutex_t beatMutex = PTHREAD_MUTEX_INITIALIZER;
 
-static wavedata_t bassDrum, hiHat, snare;
+static wavedata_t bassDrum, hiHat, snare, tom, splash;
 
 void* beatThread(void* arg);
 void playRockBeat();
@@ -36,6 +36,12 @@ void BeatBox_init() {
     strcpy(path, "/mnt/remote/myApps/beatbox-wave-files/100059__menegass__gui-drum-snare-soft.wav");
     AudioMixer_readWaveFileIntoMemory(path, &snare);
 
+    strcpy(path, "/mnt/remote/myApps/beatbox-wave-files/100063__menegass__gui-drum-tom-hi-soft.wav");
+    AudioMixer_readWaveFileIntoMemory(path, &tom);
+
+    strcpy(path, "/mnt/remote/myApps/beatbox-wave-files/100061__menegass__gui-drum-splash-soft.wav");
+    AudioMixer_readWaveFileIntoMemory(path, &splash);
+
     pthread_create(&beatThreadId, NULL, beatThread, NULL);
 }
 
@@ -45,6 +51,8 @@ void BeatBox_cleanup() {
     AudioMixer_freeWaveFileData(&bassDrum);
     AudioMixer_freeWaveFileData(&hiHat);
     AudioMixer_freeWaveFileData(&snare);
+    AudioMixer_freeWaveFileData(&tom);
+    AudioMixer_freeWaveFileData(&splash);
     pthread_mutex_destroy(&beatMutex);
 }
 
@@ -95,10 +103,10 @@ void* beatThread(void* arg) {
 
 void cycleBeatMode() {
     int currentMode = getMode();
-    currentMode = (currentMode % 3) + 1; // Cycle through modes: Rock (1), Custom (2), Off (3)
+    currentMode = (currentMode % 3) + 1; // Cycle through modes
     
     if (currentMode == 3) {
-        setMode(0); // Mode 3 = OFF
+        setMode(0);
     } else {
         setMode(currentMode);
     }
@@ -107,7 +115,6 @@ void cycleBeatMode() {
 void playRockBeat() {
     int localBPM;
 
-    // Only lock to read BPM, then unlock immediately
     pthread_mutex_lock(&beatMutex);
     localBPM = bpm;
     pthread_mutex_unlock(&beatMutex);
@@ -136,16 +143,40 @@ void playCustomBeat() {
     localBPM = bpm;
     pthread_mutex_unlock(&beatMutex);
 
-    double beatTime = (60.0 / localBPM) * 1000000; // Convert to microseconds
 
-    playHiHat();
-    usleep(beatTime / 4);
+    double beatTime = (60.0 / localBPM) * 1000000;
+    double quarterBeat = beatTime / 4;
+
+ 
+    playBassDrum();   
+    playHiHat();       
+    usleep(quarterBeat);
+    
+    playSnare();   
+    playTom();    
+    usleep(quarterBeat);
+
+    playBassDrum();    
+    playHiHat();       
+    usleep(quarterBeat);
+
+    playSnare();       
+    playTom(); 
+    usleep(quarterBeat);
 
     playBassDrum();
-    usleep(beatTime / 2);
+    playHiHat();
+    usleep(quarterBeat);
 
+    playTom(); 
+    usleep(quarterBeat);
+
+    playHiHat();
     playSnare();
-    usleep(beatTime / 4);
+    usleep(quarterBeat);
+
+    playSplash(); 
+    usleep(quarterBeat);
 }
 
 void playSnare() {
@@ -158,4 +189,12 @@ void playBassDrum() {
 
 void playHiHat() {
     AudioMixer_queueSound(&hiHat);
+}
+
+void playTom() {
+    AudioMixer_queueSound(&tom);
+}
+
+void playSplash() {
+    AudioMixer_queueSound(&splash);
 }

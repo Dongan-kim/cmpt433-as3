@@ -21,8 +21,8 @@
 #define OUTX_L 0x28
 
 // Thresholds for detecting air drumming movement
-#define THRESHOLD_X 0.8
-#define THRESHOLD_Y 0.8
+#define THRESHOLD_X 0.7
+#define THRESHOLD_Y 0.7
 #define THRESHOLD_Z 1.8
 
 #define ROTARY_PRESS_THRESHOLD_X 4.0
@@ -31,8 +31,8 @@
 
 
 #define DEBOUNCE_TIME_X 300 
-#define DEBOUNCE_TIME_Y 200 
-#define DEBOUNCE_TIME_Z 100
+#define DEBOUNCE_TIME_Y 300 
+#define DEBOUNCE_TIME_Z 200
 
 static int i2c_fd;
 static pthread_t accelThread;
@@ -57,11 +57,6 @@ static int read_accel_data(int16_t *x, int16_t *y, int16_t *z) {
 
     return 0;  
 }
-
-// int16_t read_accel_axis(uint8_t reg_low, uint8_t reg_high) {
-//     int16_t raw = (int16_t)((i2c_read_register(reg_high) << 8) | i2c_read_register(reg_low));
-//     return raw; 
-// }
 
 void accelerometer_init() {
     i2c_fd = open(I2C_BUS, O_RDWR);
@@ -125,8 +120,7 @@ void *accelerometer_listener(void *arg) {
 
     while (running) {
         if(rotaryButtonPressed == 1){
-            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
-            usleep(10000);
+            usleep(500000);
         }
 
         if (i2c_fd == -1) {
@@ -150,33 +144,29 @@ void *accelerometer_listener(void *arg) {
         float baseyG = baseyG / 16384.0;
         float basezG = basezG / 16384.0;
 
-
         float xG = (x / 16384.0) - basexG;
         float yG = (y / 16384.0) - baseyG;
         float zG = (z / 16384.0) - basezG;
 
 
-        if(!IgnoreAirDrum){
+        if(!rotaryButtonPressed){
         if (fabs(xG) > thresholdX && (currentTime - lastXTime > DEBOUNCE_TIME_X)) {
-            printf("🥁 Air-Drum X (Snare)");
-            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
-            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
+            printf("Air-Drum X (Snare)");
+            printf("G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n",xG, yG, zG);
             playSnare();
             lastXTime = currentTime;
         }
 
         if (fabs(yG) > thresholdY && (currentTime - lastYTime > DEBOUNCE_TIME_Y)) {
-            printf("🥁 Air-Drum Y (HiHat)");
-            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
-            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+            printf("Air-Drum Y (HiHat)");
+            printf("G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n",xG, yG, zG);
             playHiHat();
             lastYTime = currentTime;  
         }
 
         if (fabs(zG) > thresholdZ && (currentTime - lastZTime > DEBOUNCE_TIME_Z)) {
-            printf("🥁 Air-Drum Z (Bass Drum)");
-            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
-            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+            printf("Air-Drum Z (Bass Drum)");
+            printf("G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n",xG, yG, zG);
             playBassDrum();
             lastZTime = currentTime; 
         }

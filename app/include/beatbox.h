@@ -25,7 +25,8 @@ void cycleBeatMode();
 void playSnare();
 void playBassDrum();
 void playHiHat();
-
+void playTom();
+void playSplash();
 extern pthread_mutex_t beatMutex;
 extern int currentMode; 
 

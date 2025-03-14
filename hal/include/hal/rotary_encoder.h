@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 extern volatile int rotaryButtonPressed;
-extern volatile int IgnoreAirDrum;
 
 // Initialize the rotary encoder
 void RotaryEncoder_init(void);
