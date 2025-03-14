@@ -16,7 +16,7 @@
 #include <periodTimer.h>
 
 
-static volatile int keepRunning = 1;
+volatile int keepRunning = 1;
 static long lastPrintTime = 0;
 static pthread_t udpThreadId;
 
@@ -33,11 +33,24 @@ long getCurrentTimeMs() {
     return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
 }
 
+void cleanup_resources() {
+    printf("Cleaning up resources...\n");
+    udp_server_cleanup();
+    joystick_cleanup();
+    joystick_press_cleanup();
+    BeatBox_cleanup();
+    AudioMixer_cleanup();
+    lcd_display_cleanup();
+    RotaryEncoder_cleanup();
+    accelerometer_cleanup();
+    Period_cleanup();
+    printf("All resources cleaned up.\n");
+}
+
 void handleSigint(int sig) {
     (void)sig;
     printf("\nShutting down BeatBox...\n");
     keepRunning = 0;
-    udp_server_cleanup();
 }
 
 int main() {
@@ -99,16 +112,7 @@ int main() {
 
     }
     
-    // Cleanup
-    joystick_cleanup();
-    joystick_press_cleanup();
-    BeatBox_cleanup();
-    AudioMixer_cleanup();
-    lcd_display_cleanup();
-    RotaryEncoder_cleanup();
-    accelerometer_cleanup();
-    Period_cleanup();
-    
+    cleanup_resources();
     printf("Exited Cleanly.\n");
     return 0;
 }

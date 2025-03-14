@@ -125,6 +125,7 @@ void *accelerometer_listener(void *arg) {
 
     while (running) {
         if(rotaryButtonPressed == 1){
+            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
             usleep(10000);
         }
 
@@ -154,27 +155,28 @@ void *accelerometer_listener(void *arg) {
         float yG = (y / 16384.0) - baseyG;
         float zG = (z / 16384.0) - basezG;
 
-        if(rotaryButtonPressed != 1){
+
+        if(!IgnoreAirDrum){
         if (fabs(xG) > thresholdX && (currentTime - lastXTime > DEBOUNCE_TIME_X)) {
-            //printf("🥁 Air-Drum X (Snare)");
-            //printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
-            //printf("rotaryButtonPressed: %d", rotaryButtonPressed);
+            printf("🥁 Air-Drum X (Snare)");
+            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
             playSnare();
             lastXTime = currentTime;
         }
 
         if (fabs(yG) > thresholdY && (currentTime - lastYTime > DEBOUNCE_TIME_Y)) {
-            //printf("🥁 Air-Drum Y (HiHat)");
-            //printf("rotaryButtonPressed: %d", rotaryButtonPressed);
-            //printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+            printf("🥁 Air-Drum Y (HiHat)");
+            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
+            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
             playHiHat();
             lastYTime = currentTime;  
         }
 
         if (fabs(zG) > thresholdZ && (currentTime - lastZTime > DEBOUNCE_TIME_Z)) {
-            //printf("🥁 Air-Drum Z (Bass Drum)");
-            //printf("rotaryButtonPressed: %d", rotaryButtonPressed);
-            //printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
+            printf("🥁 Air-Drum Z (Bass Drum)");
+            printf("rotaryButtonPressed: %d\n", rotaryButtonPressed);
+            printf("🛠️ Raw: X: %d Y: %d Z: %d | 📏 G-Force: X: %.2fg Y: %.2fg Z: %.2fg\n", x, y, z, xG, yG, zG);
             playBassDrum();
             lastZTime = currentTime; 
         }
@@ -187,5 +189,6 @@ void *accelerometer_listener(void *arg) {
 // Cleanup function
 void accelerometer_cleanup() {
     running = 0;
+    printf("Accelerometer cleaned up.\n");
     close(i2c_fd);
 }

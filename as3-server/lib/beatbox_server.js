@@ -78,7 +78,7 @@ function relayToLocalPort(socket, data, replyCommandName) {
     var errorTimer = setTimeout(function() {
     	console.log("ERROR: No reply from local application.");
     	socket.emit("beatbox-error", "SERVER ERROR: No response from beat-box application. Is it running?");
-    }, 1000);
+    }, 3000);
 
 	
 	var client = dgram.createSocket('udp4');

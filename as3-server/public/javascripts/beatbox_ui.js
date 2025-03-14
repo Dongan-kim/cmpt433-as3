@@ -145,7 +145,7 @@ function setupServerMessageHandlers(socket) {
 
 function sendCommandToServer(command, options) {
 	if (communicationsTimeout == null) {
-		communicationsTimeout = setTimeout(errorHandler, 1000, 
+		communicationsTimeout = setTimeout(errorHandler, 3000, 
 				"ERROR: Unable to communicate to HTTP server. Is nodeJS server running?");
 	}
 	socket.emit(command, options);

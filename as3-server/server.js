@@ -15,6 +15,9 @@ var fs   = require('fs');
 var path = require('path');
 var mime = require('mime');
 
+var socketio = require('socket.io'); // <-- Add WebSockets
+var dgram = require('dgram'); // <-- Add UDP for shutdown signal
+
 
 /* 
  * Create the static web server
@@ -67,8 +70,46 @@ function sendFile(response, filePath, fileContents) {
 }
 
 
+var io = socketio(server);
+var procServer = require('./lib/beatbox_server');
+procServer.listen(server);
+
 /*
  * Create the beatbox server to listen for the websocket
  */
-var procServer = require('./lib/beatbox_server');
-procServer.listen(server);
+
+const shutdownSocket = dgram.createSocket('udp4');
+
+shutdownSocket.on('message', (msg, rinfo) => {
+    if (msg.toString().trim() === "shutdown") {
+        console.log("Stopping Node.js server...");
+
+        // Ensure the shutdown order is correct
+        shutdownSocket.close(() => console.log("Shutdown socket closed."));
+        
+        if (io) {
+            io.close(() => console.log("WebSockets closed."));
+        }
+
+        server.close(() => {
+            console.log("HTTP server closed.");
+            
+            // **Force Exit After 1 Second (Ensures All Resources Are Freed)**
+            setTimeout(() => {
+                console.log("exit");
+                process.exit(0);
+            }, 1000);
+        });
+
+        // **Failsafe: Force Exit After 3 Seconds If Stuck**
+        setTimeout(() => {
+            console.log("exit");
+            process.exit(1);
+        }, 3000);
+    }
+});
+
+// Listen for shutdown signal on UDP port 8089
+shutdownSocket.bind(8089, () => {
+    console.log("Shutdown listener running on port 8089");
+});

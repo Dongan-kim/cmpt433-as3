@@ -6,9 +6,17 @@
 #include "audioMixer.h"
 #include "beatbox.h"
 #include "udp_server.h"
+#include "hal/accelerometer.h"
+#include "hal/joystick_press.h"
+#include "hal/joystick.h"
+#include "hal/lcd_display.h"
+#include "hal/rotary_encoder.h"
+#include "periodTimer.h"
 
 #define PORT 12345
 #define BUFFER_SIZE 1024
+
+extern volatile int keepRunning;
 
 static int sockfd = -1;  // Global UDP socket
 static struct sockaddr_in clientAddr; // Store client info for replies
@@ -77,6 +85,9 @@ void processCommand(char *command) {
         if (numScanned == 2 && value >= 0 && value <= 2) {
             setMode(value);
             printf("Mode changed to %d\n", value);
+            char response[BUFFER_SIZE];
+            sprintf(response, "%d", value);
+            sendto(sockfd, response, strlen(response), 0, (struct sockaddr *)&clientAddr, addrLen);
         } else if (numScanned == 1) {  // Request current mode
             int currentMode = getMode();
             char response[BUFFER_SIZE];
@@ -91,6 +102,9 @@ void processCommand(char *command) {
         if (numScanned == 2 && value >= 0 && value <= 100) {
             AudioMixer_setVolume(value);
             printf("Volume set to %d\n", value);
+            char response[BUFFER_SIZE];
+            sprintf(response, "%d", value);
+            sendto(sockfd, response, strlen(response), 0, (struct sockaddr *)&clientAddr, addrLen);
         } else if (numScanned == 1) {  // Request current volume
             int currentVolume = AudioMixer_getVolume();
             char response[BUFFER_SIZE];
@@ -105,6 +119,9 @@ void processCommand(char *command) {
         if (numScanned == 2 && value >= 40 && value <= 300) {
             setBPM(value);
             printf("Tempo set to %d BPM\n", value);
+            char response[BUFFER_SIZE];
+            sprintf(response, "%d", value);
+            sendto(sockfd, response, strlen(response), 0, (struct sockaddr *)&clientAddr, addrLen);
         } else if (numScanned == 1) {  // Request current tempo
             int currentBPM = getBPM();
             char response[BUFFER_SIZE];
@@ -116,23 +133,68 @@ void processCommand(char *command) {
     }
 
     else if (strcmp(cmd, "play") == 0) {
+        char response[BUFFER_SIZE];
+    
         if (numScanned == 2 && value >= 0 && value <= 2) {
-            if (value == 0) playBassDrum();
-            else if (value == 1) playHiHat();
-            else if (value == 2) playSnare();
-            printf("Played sound %d\n", value);
-        } else {
-            printf("ERROR: Invalid sound selection. Use 0 (Bass), 1 (HiHat), or 2 (Snare).\n");
+            if (value == 0) {
+                playBassDrum();
+                sprintf(response, "Played Bass Drum");
+            } else if (value == 1) {
+                playHiHat();
+                sprintf(response, "Played Hi-Hat");
+            } else if (value == 2) {
+                playSnare();
+                sprintf(response, "Played Snare");
+            }
+    
+            printf("%s\n", response);
+            sendto(sockfd, response, strlen(response), 0, (struct sockaddr *)&clientAddr, addrLen);
+        } 
+        else {
+            sprintf(response, "ERROR: Invalid sound selection. Use 0 (Bass), 1 (HiHat), or 2 (Snare).");
+            printf("%s\n", response);
+            sendto(sockfd, response, strlen(response), 0, (struct sockaddr *)&clientAddr, addrLen);
         }
     }
 
     else if (strcmp(cmd, "stop") == 0) {
-        printf("Shutting down...\n");
-        udp_server_cleanup();
-        exit(0);
+        // Send confirmation to the web UI before shutting down
+        char response[] = "Shutdown initiated...";
+        sendto(sockfd, response, strlen(response), 0, (struct sockaddr *)&clientAddr, addrLen);
+
+        int shutdownSocket = socket(AF_INET, SOCK_DGRAM, 0);
+        if (shutdownSocket >= 0) {
+            struct sockaddr_in nodeServerAddr;
+            memset(&nodeServerAddr, 0, sizeof(nodeServerAddr));
+            nodeServerAddr.sin_family = AF_INET;
+            nodeServerAddr.sin_port = htons(8089);
+            inet_pton(AF_INET, "127.0.0.1", &nodeServerAddr.sin_addr);
+        
+            char shutdownMessage[] = "shutdown";
+            
+            int retries = 3;
+            for (int i = 0; i < retries; i++) {
+                ssize_t sent = sendto(shutdownSocket, shutdownMessage, strlen(shutdownMessage), 0,
+                                      (struct sockaddr *)&nodeServerAddr, sizeof(nodeServerAddr));
+                if (sent < 0) {
+                    perror("❌ UDP sendto failed");
+                } else {
+                    printf("✅ Sent shutdown signal to Node.js server.\n");
+                    break;
+                }
+                sleep(1);  // Wait 1 sec before retry
+            }
+        
+            close(shutdownSocket);
+        }
+
+        keepRunning = 0;
+        //cleanup_resources();
+
+        printf("All resources cleaned up. Exiting now.\n");
+        //exit(0);
     }
 
-    // ⚠️ Unknown Command
     else {
         printf("ERROR: Unknown command: %s\n", cmd);
     }

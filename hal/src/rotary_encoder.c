@@ -36,6 +36,7 @@ static int halfStepDetected = 0;  // Flags if halfway movement was detected
 static long lastTimeUs = 0; // Last timestamp in microseconds
 
 volatile int rotaryButtonPressed = 0;
+volatile int IgnoreAirDrum = 0;
 
 //Helper function: Get current time in microseconds
 static long getCurrentTimeUs() {
@@ -182,9 +183,11 @@ int RotaryEncoder_buttonPressed(void) {
 
     long currentTime = getCurrentTimeUs();
     int buttonState = gpiod_line_get_value(buttonLine);
-    if(buttonState == 0){
+
+    if (buttonState == 0) {
         rotaryButtonPressed = 1;
-        //printf("pressed!\n");
+        IgnoreAirDrum = 1;  // **Set IgnoreAirDrum EARLY**
+        printf("Pressed! Air Drum Disabled.\n");
     }
 
     // Detect Falling Edge (Button Pressed)
@@ -200,14 +203,6 @@ int RotaryEncoder_buttonPressed(void) {
     rotaryButtonPressed = 0;
     return 0;  // No button press detected
 }
-
-// Get current encoder value
-// int RotaryEncoder_getValue(void) {
-//     pthread_mutex_lock(&encoderMutex);
-//     setBPM(encoderValue);
-//     pthread_mutex_unlock(&encoderMutex);
-//     return value;
-// }
 
 void RotaryEncoder_cleanup(void) {
     gpiod_line_release(lineA);

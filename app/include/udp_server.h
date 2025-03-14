@@ -1,6 +1,7 @@
 #ifndef UDP_SERVER_H
 #define UDP_SERVER_H
 
+extern volatile int keepRunning;
 // Function to start the UDP server (runs in a separate thread)
 void* udp_server_main(void* arg);
 void udp_server_cleanup(void);

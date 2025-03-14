@@ -89,4 +89,14 @@ app/CMakeFiles/beatbox.dir/src/udp_server.c.o: \
  /usr/include/aarch64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
  /usr/include/aarch64-linux-gnu/bits/pthread_stack_min-dynamic.h \
  /usr/include/aarch64-linux-gnu/bits/pthread_stack_min.h \
- /home/don/cmpt433/work/myApps/beatbox/app/include/udp_server.h
+ /home/don/cmpt433/work/myApps/beatbox/app/include/udp_server.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/accelerometer.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/joystick_press.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/joystick.h \
+ /usr/lib/gcc/aarch64-linux-gnu/14/include/stdint.h /usr/include/stdint.h \
+ /usr/include/aarch64-linux-gnu/bits/wchar.h \
+ /usr/include/aarch64-linux-gnu/bits/stdint-least.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/lcd_display.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/../hal/include/hal/rotary_encoder.h \
+ /usr/lib/gcc/aarch64-linux-gnu/14/include/stdbool.h \
+ /home/don/cmpt433/work/myApps/beatbox/app/include/periodTimer.h
